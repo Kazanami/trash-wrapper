@@ -1,14 +1,27 @@
 
 _generate_random(){
-  cat /dev/urandom | base64 | fold -w 10 | head -n 1
+  cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 10 | head -n 1
 }
 
 function rm(){
   for arg in $@;do
     case $arg in
+      -*)
+        if [[ "$1" =~ ^--stat ]];then
+          OPTS="stat"
+        fi
+        shift;;
+      list)
+        :
+        shift;;
+      *)
+        SELECTED_FILES=$1
+#        _moving_trash ${arg}
+        shift;;
     esac
   done
-  command echo "Input: $@"
+  command echo "Input: ${SELECTED_FILES}"
+  command echo "OPTIONS: ${OPTS}"
 }
 
 _moving_trash(){

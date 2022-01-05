@@ -4,9 +4,12 @@ RUN apt-get update && \
     useradd -m kazanami -s /usr/bin/bash && \
     git clone https://github.com/Kazanami/dotfiles /home/kazanami/dotfiles && \
     rm -rf /var/cache/apt && \
-    chown kazanami:kazanami -R /home/kazanami
+    chown kazanami:kazanami -R /home/kazanami && \
+    echo '#!/bin/bash\nexec /bin/bash -l -c "$*"' > /entrypoint.sh && \
+    chmod +x /entrypoint.sh
 USER kazanami
 WORKDIR /home/kazanami
 RUN bash dotfiles/bin/link.sh && \
     ln -s /home/kazanami/trash-wrapper.git/trash.wrapper /home/kazanami/.bash_aliases.d/trash.alias
+ENTRYPOINT ["/entrypoint.sh"]
 
