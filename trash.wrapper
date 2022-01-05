@@ -1,0 +1,20 @@
+
+_generate_random(){
+  cat /dev/urandom | base64 | fold -w 10 | head -n 1
+}
+
+function rm(){
+  for arg in $@;do
+    case $arg in
+    esac
+  done
+  command echo "Input: $@"
+}
+
+_moving_trash(){
+  :
+}
+
+_restore_ff(){
+  :
+}

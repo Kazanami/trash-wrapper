@@ -1,0 +1,10 @@
+FROM ubuntu:latest
+RUN apt-get update && \
+    apt-get install -y git neovim curl wget bash bash-completion && \
+    useradd -m kazanami -s /usr/bin/bash && \
+    git clone https://github.com/Kazanami/dotfiles /home/kazanami/dotfiles && \
+    chown kazanami:kazanami -R /home/kazanami && \
+    ln -s /home/kazanami/trash-wrapper.git/trash.wrapper /home/kazanami/.bash_aliases.d/trash.alias
+USER kazanami
+WORKDIR /home/kazanami
+RUN bash dotfiles/bin/link.sh

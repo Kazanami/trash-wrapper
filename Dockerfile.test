@@ -1,0 +1,10 @@
+FROM ubuntu:latest
+RUN apt-get update && \
+    apt-get install -y git neovim && \
+    useradd -m kazanami
+COPY trash.wrapper /home/kazanami/trash.wrapper
+RUN chown kazanami. /home/kazanami/trash.wrapper && \
+    echo "source ~/trash.wrapper" >> /home/kazanami/.bashrc
+WORKDIR /home/kazanami
+USER kazanami
+
