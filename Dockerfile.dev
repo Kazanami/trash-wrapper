@@ -7,6 +7,6 @@ RUN apt-get update && \
     chown kazanami:kazanami -R /home/kazanami
 USER kazanami
 WORKDIR /home/kazanami
-RUN bash dotfiles/bin/link.sh &&
+RUN bash dotfiles/bin/link.sh && \
     ln -s /home/kazanami/trash-wrapper.git/trash.wrapper /home/kazanami/.bash_aliases.d/trash.alias
 
