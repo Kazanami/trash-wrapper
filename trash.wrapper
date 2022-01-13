@@ -1,6 +1,7 @@
 
 _generate_random(){
-  cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 10 | head -n 1
+#  cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 10 | head -n 1
+  cat /proc/sys/kernel/random/uuid
 }
 
 function rm(){
@@ -10,22 +11,29 @@ function rm(){
         if [[ "$1" =~ ^--stat ]];then
           OPTS="stat"
         fi
+        OPTS+="$1 "
         shift;;
       list)
         :
         shift;;
       *)
-        SELECTED_FILES=$1
-#        _moving_trash ${arg}
+#        SELECTED_FILES=$1
+        _moving_trash ${arg}
         shift;;
     esac
   done
   command echo "Input: ${SELECTED_FILES}"
   command echo "OPTIONS: ${OPTS}"
+  unset SELECTED_FILES OPTS
 }
 
 _moving_trash(){
-  :
+  local goto_trash_file="$1"
+  local full_path="$(readlink -f ${goto_trash_file})"
+  local gen_uuid="$(_generate_random)"
+  echo "Selected File: ${goto_trash_file}"
+  echo "FullPath: ${full_path}"
+  echo "Random UUID: ${gen_uuid}"
 }
 
 _restore_ff(){
