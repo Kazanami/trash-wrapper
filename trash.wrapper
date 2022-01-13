@@ -9,19 +9,23 @@ function rm(){
     case $arg in
       -*)
         if [[ "$1" =~ ^--stat ]];then
-          OPTS="stat"
+          OPTS="stat "
+          shift
         fi
-        OPTS+="$1 "
+        OPTS+=("$@")
         shift;;
       list)
         :
         shift;;
       *)
-#        SELECTED_FILES=$1
-        _moving_trash ${arg}
+        SELECTED_FILES=$1
+#        _moving_trash ${arg}
         shift;;
     esac
   done
+  if [[ ! -z ${SELECTED_FILES} ]];then
+    _moving_trash ${SELECTED_FILES}
+  fi
   command echo "Input: ${SELECTED_FILES}"
   command echo "OPTIONS: ${OPTS}"
   unset SELECTED_FILES OPTS
@@ -31,6 +35,10 @@ _moving_trash(){
   local goto_trash_file="$1"
   local full_path="$(readlink -f ${goto_trash_file})"
   local gen_uuid="$(_generate_random)"
+  if [ ! -e "${full_path}" ];then
+    echo "cannnot move to trash ${goto_trash_file} : No such file or directory:"
+    return 1
+  fi
   echo "Selected File: ${goto_trash_file}"
   echo "FullPath: ${full_path}"
   echo "Random UUID: ${gen_uuid}"
